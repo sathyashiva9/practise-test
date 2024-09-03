@@ -1,0 +1,22 @@
+kind: HTTPScaledObject
+apiVersion: http.keda.sh/v1alpha1
+metadata:
+    name: nginx-app-http
+spec:
+    hosts:
+        - myhost.com
+    scaleTargetRef:
+        deployment: nginx-app
+        service: nginx-app
+        port: 80
+    replicas:
+        min: 0
+        max: 10
+    scaledownPeriod: 60
+    scalingMetric: # requestRate and concurrency are mutually exclusive
+        requestRate:
+            granularity: 1s
+            targetValue: 4
+            window: 1m
+#        concurrency:
+#            targetValue: 2    
